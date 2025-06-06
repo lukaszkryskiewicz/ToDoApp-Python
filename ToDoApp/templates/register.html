@@ -1,0 +1,32 @@
+{% from "bootstrap5/form.html" import render_form %} {% block content %} {%
+include "header.html" %}
+
+
+  <header class="py-5">
+      <div class="container px-lg-5">
+          <div class="p-4 p-lg-5 bg-light rounded-3 text-center">
+              <div class="m-4 m-lg-5">
+                  <h1 class="display-5 fw-bold">Register in ToDoApp!</h1>
+              </div>
+          </div>
+      </div>
+</header>
+
+<main class="mb-4">
+  <div class="container">
+    <div class="row">
+      {% with messages = get_flashed_messages() %}
+         {% if messages %}
+            {% for message in messages %}
+              <p class="flash">{{ message }}</p>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+      <div class="col-lg-8 col-md-10 mx-auto">
+        {{ render_form(form) }}
+      </div>
+    </div>
+  </div>
+</main>
+
+{% include "footer.html" %} {% endblock %}
