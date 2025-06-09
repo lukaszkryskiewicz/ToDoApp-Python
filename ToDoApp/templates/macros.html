@@ -1,7 +1,7 @@
 
 {% macro list_card(lst) %}
 <div class="col-lg-4 col-md-6 mb-4">
-  <div class="card h-100">
+  <div class="card h-100" id="card-{{ lst.id }}">
     <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
       <span>{{ lst.title }}</span>
       {% if lst.is_favourite %}
@@ -11,6 +11,7 @@
       {% endif %}
     </div>
     <ul class="list-group list-group-flush"
+        id="item-container-{{ lst.id }}"
         style="max-height: 12rem; overflow-y: auto;">
       {% for item in lst['items'][:5] %}
         <li class="list-group-item border-bottom">
@@ -21,12 +22,15 @@
         <li class="list-group-item text-center text-muted">
           … i {{ lst['items']|length - 5 }} więcej
         </li>
-      {% else %}
-        <li class="list-group-item text-center text-muted">
-          <input placeholder="Add item..." class="">
-        </li>
       {% endif %}
     </ul>
+    <div class="card-footer">
+      <button class="btn btn-sm btn-outline-secondary add-item-btn"
+              data-list-id="{{ lst.id }}"
+              data-add-item-url="{{ url_for('main.item_add', list_id=lst.id) }}">
+        Add item
+      </button>
+    </div>
   </div>
 </div>
 {% endmacro %}

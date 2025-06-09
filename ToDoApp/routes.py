@@ -25,3 +25,28 @@ def list_add():
 
     html = render_template('partials/list_card.html', lst=new_list)
     return jsonify(success=True, html=html)
+
+
+@main_bp.route('/list/<int:list_id>/item/add', methods=['POST'])
+@login_required
+def item_add(list_id):
+    current_list = ToDoList.query.filter_by(
+        id=list_id, user_id=current_user.id
+    ).first()
+
+    if not current_list:
+        return jsonify(success=False, error="Nie znaleziono listy"), 404
+
+    title = request.form.get('title', '').strip()
+
+    if not title:
+        return jsonify(success=False, error='Title cannot be empty!'), 400
+
+    new_item = ToDoItem(title=title, to_do_list=current_list)
+    db.session.add(new_item)
+    db.session.commit()
+
+    html = render_template('partials/item.html',
+                           item=new_item,
+                           list_id=list_id)
+    return jsonify(success=True, html=html)
