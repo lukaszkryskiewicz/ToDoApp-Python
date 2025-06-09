@@ -1,0 +1,32 @@
+
+{% macro list_card(lst) %}
+<div class="col-lg-4 col-md-6 mb-4">
+  <div class="card h-100">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+      <span>{{ lst.title }}</span>
+      {% if lst.is_favourite %}
+        <i class="bi bi-star-fill"></i>
+      {% else %}
+        <i class="bi bi-star"></i>
+      {% endif %}
+    </div>
+    <ul class="list-group list-group-flush"
+        style="max-height: 12rem; overflow-y: auto;">
+      {% for item in lst['items'][:5] %}
+        <li class="list-group-item border-bottom">
+          {{ item.title }}
+        </li>
+      {% endfor %}
+      {% if lst['items']|length > 5 %}
+        <li class="list-group-item text-center text-muted">
+          … i {{ lst['items']|length - 5 }} więcej
+        </li>
+      {% else %}
+        <li class="list-group-item text-center text-muted">
+          <input placeholder="Add item..." class="">
+        </li>
+      {% endif %}
+    </ul>
+  </div>
+</div>
+{% endmacro %}

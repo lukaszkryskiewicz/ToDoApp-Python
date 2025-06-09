@@ -1,0 +1,22 @@
+{% include "header.html" %}
+{% import 'macros.html' as ui %}
+
+        <header class="py-5">
+            <div class="container px-lg-5">
+                <div class="p-4 p-lg-5 bg-light rounded-3 text-center">
+                    <div class="m-4 m-lg-5">
+                        <h1 class="display-5 fw-bold">Create your lists! </h1>
+                        <button class="btn btn-primary btn-lg" id="show-add-list">Add a list!</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="container px-lg-5">
+            <div class="row" id="list-container">
+              {% for lst in logged_user.user_lists %}
+                {{ ui.list_card(lst) }}
+              {% endfor %}
+            </div>
+        </div>
+{% include "modal.html" %}
+{% include "footer.html" %}
