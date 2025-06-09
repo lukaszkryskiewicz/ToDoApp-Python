@@ -33,7 +33,7 @@ class ToDoList(db.Model):
     title: Mapped[str] = mapped_column(String(255), nullable=False)
     is_favorite: Mapped[bool] = mapped_column(Boolean, default=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), nullable=False)
-    updated_at: Mapped[datetime]= mapped_column(DateTime, onupdate=func.now())
+    updated_at: Mapped[datetime]= mapped_column(DateTime, onupdate=func.now(), nullable=True)
 
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), nullable=False)
     user: Mapped['User'] = relationship(back_populates='user_lists')
@@ -53,7 +53,7 @@ class ToDoItem(db.Model):
     is_done: Mapped[bool] = mapped_column(Boolean, default=False)
     details: Mapped[str | None] = mapped_column(String(255), nullable=True, default=None)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), nullable=False)
-    updated_at: Mapped[datetime]= mapped_column(DateTime, onupdate=func.now())
+    updated_at: Mapped[datetime]= mapped_column(DateTime, onupdate=func.now(), nullable=True)
     due_date: Mapped[datetime | None] = mapped_column(DateTime, nullable=True, default=None)
 
     to_do_list_id: Mapped[int] = mapped_column(ForeignKey('to_do_lists.id'), nullable=False)
