@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import Blueprint, render_template, request, jsonify
 from flask_login import login_required, current_user
 from .models import db, ToDoList, ToDoItem, User
@@ -34,19 +36,30 @@ def item_add(list_id):
         id=list_id, user_id=current_user.id
     ).first()
 
+    from_list = request.form.get('from_list', '').lower() == 'true'
     if not current_list:
-        return jsonify(success=False, error="Nie znaleziono listy"), 404
+        return jsonify(success=False, error="List not found"), 404
 
     title = request.form.get('title', '').strip()
+    due_date_str = request.form.get('due_date', '').strip()
+    details = request.form.get('details', None).strip()
+    print(from_list)
+    if due_date_str:
+        try:
+            due_date = datetime.fromisoformat(due_date_str)
+        except ValueError:
+            return jsonify(success=False, error='Wrong date format'), 400
+    else:
+        due_date = None
 
     if not title:
         return jsonify(success=False, error='Title cannot be empty!'), 400
 
-    new_item = ToDoItem(title=title, to_do_list=current_list)
+    new_item = ToDoItem(title=title, due_date = due_date, details = details, to_do_list=current_list)
     db.session.add(new_item)
     db.session.commit()
 
-    html = render_template('partials/item.html',
+    html = render_template('partials/item_view_list.html' if from_list else 'partials/item.html',
                            item=new_item,
                            list_id=list_id)
     return jsonify(success=True, html=html)
@@ -88,17 +101,3 @@ def toggle_list_fav(list_id):
     db.session.commit()
     return jsonify(success=True, is_favorite=lst.is_favorite)
 
-
-
-
-# @main_bp.route('/list/')
-# @login_required
-# def list_details(list_id):
-#     current_list = ToDoList.query.filter_by(
-#         id=list_id, user_id=current_user.id
-#     ).first()
-#
-#     if not current_list:
-#         return
-#
-#     return render_template('view_list.html', todo_list = current_list)
