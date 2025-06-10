@@ -3,7 +3,7 @@
 <div class="col-lg-4 col-md-6 mb-4">
   <div class="card h-100" id="card-{{ lst.id }}">
     <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-      <span>{{ lst.title }}</span>
+      <a href="{{url_for('main.list_details', list_id=lst.id )}}"><span class='text-decoration-none'>{{ lst.title }}</span></a>
       {% if lst.is_favourite %}
         <i class="bi bi-star-fill"></i>
       {% else %}
