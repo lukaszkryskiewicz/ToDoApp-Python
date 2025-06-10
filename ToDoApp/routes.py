@@ -43,7 +43,6 @@ def item_add(list_id):
     title = request.form.get('title', '').strip()
     due_date_str = request.form.get('due_date', '').strip()
     details = request.form.get('details', None).strip()
-    print(from_list)
     if due_date_str:
         try:
             due_date = datetime.fromisoformat(due_date_str)
@@ -100,4 +99,13 @@ def toggle_list_fav(list_id):
     lst.is_favorite = not lst.is_favorite
     db.session.commit()
     return jsonify(success=True, is_favorite=lst.is_favorite)
+
+@main_bp.route('/list/<int:list_id>/del')
+@login_required
+def delete_list(list_id):
+    lst = ToDoList.query.filter_by(id=list_id, user_id=current_user.id).first_or_404()
+    db.session.delete(lst)
+    db.session.commit()
+    return render_template('dashboard.html', logged_user = current_user)
+
 

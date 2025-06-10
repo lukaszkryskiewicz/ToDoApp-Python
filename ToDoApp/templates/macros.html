@@ -9,6 +9,11 @@
       {% else %}
         <i class="bi bi-star"></i>
       {% endif %}
+      <a href="{{url_for('main.delete_list', list_id=lst.id )}}"
+         onclick="return confirm('Co you really want to delete this list with all the items?');">
+        <span class='text-decoration-none'>
+        <i class="bi bi-trash"></i>
+      </span></a>
     </div>
     <ul class="list-group list-group-flush"
         id="item-container-{{ lst.id }}"
